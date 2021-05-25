@@ -1,0 +1,66 @@
+const NovaToken = artifacts.require("NovaToken");
+const SNovaToken = artifacts.require("SNovaToken");
+const Multicall = artifacts.require("Multicall");
+const FeeManager = artifacts.require("FeeManager");
+const ShibaFactory = artifacts.require("ShibaFactory");
+const ShibaBonusAggregator = artifacts.require("ShibaBonusAggregator");
+const ShibaRouter = artifacts.require("ShibaRouter");
+const ShibaMoneyPot = artifacts.require("ShibaMoneyPot");
+const MasterShiba = artifacts.require("MasterShiba");
+const Timelock = artifacts.require("Timelock");
+
+module.exports = function (deployer) {
+   
+    deployer.deploy(Multicall);
+
+    deployer.deploy(NovaToken);
+        const swapPenaltyMaxPeriod = 84600;
+        const swapPenaltyMaxPerSNova = 30;
+    deployer.deploy(SNovaToken, swapPenaltyMaxPeriod, swapPenaltyMaxPerSNova);
+
+    deployer.deploy(ShibaBonusAggregator);
+
+        const admin_ = '0xB8419aBa04B8b36E26E80b2b8284f1e0DA077bB2';
+        const delay_ = 28200; //24 hours
+    deployer.deploy(Timelock, admin_, delay_); 
+_________________________
+        const _Nova = '0xa809F75876fdE949b029D99552547DD2c4e320CF';
+        const _teamAddr = '0xB8419aBa04B8b36E26E80b2b8284f1e0DA077bB2'; // swap fees team wallet 
+        const _moneyPotShare = 7500;
+    deployer.deploy(FeeManager, _Nova, _teamAddr, _moneyPotShare); 
+__________________________
+        const _feeTo = '0x9A50e1dCE6B5E4E6CDEab09A7aCb5068f8e61D91'; //fee manager
+        const owner = '0xB8419aBa04B8b36E26E80b2b8284f1e0DA077bB2';
+        const _feePercent = 20;
+    deployer.deploy(ShibaFactory, _feeTo, owner, _feePercent); //0.5.16
+
+____________________________________
+        const _WETH = '0xae13d989dac2f0debff460ac112a837c89baa7cd'; //mainnet 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c
+        const _factory = '0xC42c94349F9Cea97e1347EA22108FAc2931F6De7';
+    deployer.deploy(ShibaRouter, _factory, _WETH); //0.6.6
+
+        const _Nova = '0xa809F75876fdE949b029D99552547DD2c4e320CF';
+        const _sNova = '0x64F6852088B9B70fDe86225Ebb660F0d1709D5E7';
+        const _bonusAggregator = '0x0bD0445d91F37076c43254a162e611198A5De02d';
+        const _devaddr = '0xB8419aBa04B8b36E26E80b2b8284f1e0DA077bB2';
+        const _feeAddress = '0x9A50e1dCE6B5E4E6CDEab09A7aCb5068f8e61D91'; //fee manager
+        const _NovaPerBlock = 0xde0b6b3a7640000n;
+        const _startBlock = 9155945;
+    deployer.deploy(MasterShiba, 
+         _Nova,
+         _sNova,
+         _bonusAggregator,
+         _devaddr,
+         _feeAddress,
+         _NovaPerBlock,
+         _startBlock);
+___________________________________
+        const _sNova = '0x64F6852088B9B70fDe86225Ebb660F0d1709D5E7';
+        const _feeManager = '0x9A50e1dCE6B5E4E6CDEab09A7aCb5068f8e61D91';
+        const _masterShiba = '0xcF6541a23547062468fDc3088677d762750C81bA';
+        const _startBlock = 9155945;
+        const _initialUpdateMoneyPotPeriodNbBlocks = 28880;
+    deployer.deploy(ShibaMoneyPot, _sNova, _feeManager, _masterShiba, _startBlock, _initialUpdateMoneyPotPeriodNbBlocks);
+
+
+};

@@ -1,0 +1,71 @@
+const NovaToken = artifacts.require("NovaToken");
+const SNovaToken = artifacts.require("SNovaToken");
+const Multicall = artifacts.require("Multicall");
+const FeeManager = artifacts.require("FeeManager");
+const ShibaFactory = artifacts.require("ShibaFactory");
+const ShibaBonusAggregator = artifacts.require("ShibaBonusAggregator");
+const ShibaRouter = artifacts.require("ShibaRouter");
+const ShibaMoneyPot = artifacts.require("ShibaMoneyPot");
+const MasterShiba = artifacts.require("MasterShiba");
+const Timelock = artifacts.require("Timelock");
+
+module.exports = function (deployer) {
+   
+    deployer.deploy(Multicall);
+
+    deployer.deploy(NovaToken);
+        const swapPenaltyMaxPeriod = 84600;
+        const swapPenaltyMaxPerSNova = 30;
+    deployer.deploy(SNovaToken, swapPenaltyMaxPeriod, swapPenaltyMaxPerSNova);
+
+    deployer.deploy(ShibaBonusAggregator);
+
+        const admin_ = 0xB8419aBa04B8b36E26E80b2b8284f1e0DA077bB2;
+        const delay_ = 28200; //24 hours
+    deployer.deploy(Timelock, admin_, delay_); 
+_________________________
+        const _Nova = "0xa809F75876fdE949b029D99552547DD2c4e320CF";
+        const _teamAddr = "0xB8419aBa04B8b36E26E80b2b8284f1e0DA077bB2"; // swap fees team wallet 
+        const _moneyPotShare = 7500;
+    deployer.deploy(FeeManager, _Nova, _teamAddr, _moneyPotShare); 
+__________________________
+        const _feeTo = ; //fee manager
+        const owner = 0xB8419aBa04B8b36E26E80b2b8284f1e0DA077bB2;
+        const _feePercent = 20;
+    deployer.deploy(ShibaFactory, _feeTo, owner, _feePercent); //0.5.16
+
+____________________________________
+        const _WETH = ; //mainnet 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c
+        const _factory = ;
+    deployer.deploy(ShibaRouter, _factory, _WETH); //0.6.6
+
+        const _sNova = 0x64F6852088B9B70fDe86225Ebb660F0d1709D5E7;
+        const _feeManager = ;
+        const _masterShiba = ;
+        const _startBlock = ;
+        const _initialUpdateMoneyPotPeriodNbBlocks = 28880;
+    deployer.deploy(ShibaMoneyPot, _sNova, _feeManager, _masterShiba, _startBlock, _initialUpdateMoneyPotPeriodNbBlocks);
+
+        const _Nova = ;
+        const _sNova = ;
+        const _bonusAggregator = ;
+        const _devaddr = 0xB8419aBa04B8b36E26E80b2b8284f1e0DA077bB2;
+        const _feeAddress = ; //fee manager
+        const _NovaPerBlock = 1000000000000000000;
+        const _startBlock = ;
+    deployer.deploy(MasterShiba, 
+         _Nova,
+         _sNova,
+         _bonusAggregator,
+         _devaddr,
+         _feeAddress,
+         _NovaPerBlock,
+         _startBlock);
+
+
+
+ 
+
+
+
+};
