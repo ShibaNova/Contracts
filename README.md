@@ -1,33 +1,20 @@
-# backend-prototype
-Backend (i.e. contracts) Prototyping for ShibaNova Project
-
-Assuming a private license for now; will update appropriately later.
-
-Note this will initially be a private ad-hoc clone (i.e. not forked directly through GitHub as that prevents us from working on a private repository). Will be cloned from https://github.com/3v3rt0n/DextroFinance
+# ShibaNova contracts
 
 
+FeeManager: [0x9A50e1dCE6B5E4E6CDEab09A7aCb5068f8e61D91 ](https://testnet.bscscan.com/address/0x9A50e1dCE6B5E4E6CDEab09A7aCb5068f8e61D91#contracts)
 
+MasterShiba: [0xcF6541a23547062468fDc3088677d762750C81bA](https://testnet.bscscan.com/address/0xcF6541a23547062468fDc3088677d762750C81bA#code)
 
+NovaToken: [0x9F249308497344A9e23e2c269703aD92c80b9F86 ](https://testnet.bscscan.com/address/0x9F249308497344A9e23e2c269703aD92c80b9F86#contracts)
 
-# uranium.finance contracts
+SNovaToken: [0x465d9BD104c7d7Baa98bF4f0EDF471b0d92D4e1c ](https://testnet.bscscan.com/address/0x465d9BD104c7d7Baa98bF4f0EDF471b0d92D4e1c#contracts)
 
+Timelock: [0xb2B8C7fb1d58Abe082e105f52833eed59637501d ](https://testnet.bscscan.com/address/0xb2B8C7fb1d58Abe082e105f52833eed59637501d#contracts3)
 
-FeeManager: [0x50644F5A0A39dCd083641ffa310DB2609e03b32E](https://bscscan.com/address/0x50644F5A0A39dCd083641ffa310DB2609e03b32E)
+ShibaBonusAggregator: [0x0bD0445d91F37076c43254a162e611198A5De02d ](https://testnet.bscscan.com/address/0x0bD0445d91F37076c43254a162e611198A5De02d#contracts3)
 
-MasterUranium: [0xF3ca45633B2b2C062282ab38de74EAd2B76E8800](https://bscscan.com/address/0xF3ca45633B2b2C062282ab38de74EAd2B76E8800)
+ShibaFactory : [0xC42c94349F9Cea97e1347EA22108FAc2931F6De7 ](https://testnet.bscscan.com/address/0xC42c94349F9Cea97e1347EA22108FAc2931F6De7#contracts)
 
-Multicall: [0xaa1D32B78A8Ae867744E43AF97174D1390fDC34b](https://bscscan.com/address/0xaa1D32B78A8Ae867744E43AF97174D1390fDC34b)
+ShibaMoneyPot: [0x745b5045f725a53bc0217568bAf8649F88d2De82 ](https://testnet.bscscan.com/address/0x745b5045f725a53bc0217568bAf8649F88d2De82#contracts)
 
-RadsToken (U92): [0x670De9f45561a2D02f283248F65cbd26EAd861C8](https://bscscan.com/address/0x670De9f45561a2D02f283248F65cbd26EAd861C8)
-
-SRadsToken (U235): [0x28d2E3BB1Ec54A6eE8b3Bee612F03A85d3Ec0C0c](https://bscscan.com/address/0x28d2E3BB1Ec54A6eE8b3Bee612F03A85d3Ec0C0c)
-
-Timelock: [0xC465C5eeD5899bd1Ae2041EAC439Df0DA00CDDF3](https://bscscan.com/address/0xC465C5eeD5899bd1Ae2041EAC439Df0DA00CDDF3)
-
-UraniumBonusAggregator: [0x0Df317718aBCf175e3d945D16aC1F42866057A03](https://bscscan.com/address/0x0Df317718aBCf175e3d945D16aC1F42866057A03)
-
-UraniumFactory : [0xA943eA143cd7E79806d670f4a7cf08F8922a454F](https://bscscan.com/address/0xA943eA143cd7E79806d670f4a7cf08F8922a454F)
-
-UraniumMoneyPot: [0x020Fa682C4249eF7d242691d04cf6Ff0A609B941](https://bscscan.com/address/0x020Fa682C4249eF7d242691d04cf6Ff0A609B941)
-
-UraniumRouter : [0xF4EE46Ac2BA83121F79c778ed0D950ffF11a18Ed](https://bscscan.com/address/0xF4EE46Ac2BA83121F79c778ed0D950ffF11a18Ed)
+ShibaRouter : [0x1720bA6c96c7E68Aa8417aBf55D6Bb08a0EB965A ](https://testnet.bscscan.com/address/0x1720bA6c96c7E68Aa8417aBf55D6Bb08a0EB965A#contracts)
