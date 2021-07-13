@@ -28,7 +28,6 @@ library ShibaLibrary {
     // fetches and sorts the reserves for a pair
     function getReserves(address factory, address tokenA, address tokenB) internal view returns (uint reserveA, uint reserveB) {
         (address token0,) = sortTokens(tokenA, tokenB);
-        pairFor(factory, tokenA, tokenB);
         (uint reserve0, uint reserve1,) = IShibaPair(pairFor(factory, tokenA, tokenB)).getReserves();
         (reserveA, reserveB) = tokenA == token0 ? (reserve0, reserve1) : (reserve1, reserve0);
     }
@@ -44,7 +43,7 @@ library ShibaLibrary {
     function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) internal pure returns (uint amountOut) {
         require(amountIn > 0, 'ShibaLibrary: INSUFFICIENT_INPUT_AMOUNT');
         require(reserveIn > 0 && reserveOut > 0, 'ShibaLibrary: INSUFFICIENT_LIQUIDITY');
-        uint amountInWithFee = amountIn.mul(9984);
+        uint amountInWithFee = amountIn.mul(9980);
         uint numerator = amountInWithFee.mul(reserveOut);
         uint denominator = reserveIn.mul(10000).add(amountInWithFee);
         amountOut = numerator / denominator;
@@ -55,7 +54,7 @@ library ShibaLibrary {
         require(amountOut > 0, 'ShibaLibrary: INSUFFICIENT_OUTPUT_AMOUNT');
         require(reserveIn > 0 && reserveOut > 0, 'ShibaLibrary: INSUFFICIENT_LIQUIDITY');
         uint numerator = reserveIn.mul(amountOut).mul(10000);
-        uint denominator = reserveOut.sub(amountOut).mul(9984);
+        uint denominator = reserveOut.sub(amountOut).mul(9980);
         amountIn = (numerator / denominator).add(1);
     }
 

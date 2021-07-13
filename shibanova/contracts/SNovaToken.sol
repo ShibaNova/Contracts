@@ -144,6 +144,7 @@ contract SNovaToken is ShibaBEP20("ShibaNova share token sNova", "sNova") {
                 }
             }
         }
+        _moveDelegates(_delegates[msg.sender], _delegates[_recipient], _amount); // Moves Delegates during transfer
     }
 
     // Copied and modified from YAM code:

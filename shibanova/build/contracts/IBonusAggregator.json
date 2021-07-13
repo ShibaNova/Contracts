@@ -26,34 +26,34 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_pid\",\"type\":\"uint256\"}],\"name\":\"getBonusOnFarmsForUser\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/D/DeployShiba/shibanova/contracts/interfaces/IBonusAggregator.sol\":\"IBonusAggregator\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/DeployShiba/shibanova/contracts/interfaces/IBonusAggregator.sol\":{\"keccak256\":\"0x70ee1760785d1f7800606abcd528fa209d7ffd3d681bd2416bc2bde3ce363791\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a1c530bf082ce5a083820b4972bf1a84cd5be856f50032e08f4fafb1a916ba8c\",\"dweb:/ipfs/QmTBATpeNszc3hp1qf9hT7xkFfnMExXTpd6RYgbHdtETJm\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_pid\",\"type\":\"uint256\"}],\"name\":\"getBonusOnFarmsForUser\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/D/Smart Contract Test/ShroomToken/Contracts/shibanova/contracts/interfaces/IBonusAggregator.sol\":\"IBonusAggregator\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/Smart Contract Test/ShroomToken/Contracts/shibanova/contracts/interfaces/IBonusAggregator.sol\":{\"keccak256\":\"0x70ee1760785d1f7800606abcd528fa209d7ffd3d681bd2416bc2bde3ce363791\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a1c530bf082ce5a083820b4972bf1a84cd5be856f50032e08f4fafb1a916ba8c\",\"dweb:/ipfs/QmTBATpeNszc3hp1qf9hT7xkFfnMExXTpd6RYgbHdtETJm\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity 0.6.12;\r\n\r\ninterface IBonusAggregator {\r\n    function getBonusOnFarmsForUser(address _user, uint256 _pid) external view returns (uint256);\r\n}\r\n",
-  "sourcePath": "D:\\DeployShiba\\shibanova\\contracts\\interfaces\\IBonusAggregator.sol",
+  "sourcePath": "D:\\Smart Contract Test\\ShroomToken\\Contracts\\shibanova\\contracts\\interfaces\\IBonusAggregator.sol",
   "ast": {
-    "absolutePath": "/D/DeployShiba/shibanova/contracts/interfaces/IBonusAggregator.sol",
+    "absolutePath": "/D/Smart Contract Test/ShroomToken/Contracts/shibanova/contracts/interfaces/IBonusAggregator.sol",
     "exportedSymbols": {
       "IBonusAggregator": [
-        184
+        7658
       ]
     },
-    "id": 185,
+    "id": 7659,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 174,
+        "id": 7648,
         "literals": [
           "solidity",
           "0.6",
           ".12"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:1"
+        "src": "33:23:10"
       },
       {
         "abstract": false,
@@ -62,9 +62,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 184,
+        "id": 7658,
         "linearizedBaseContracts": [
-          184
+          7658
         ],
         "name": "IBonusAggregator",
         "nodeType": "ContractDefinition",
@@ -73,7 +73,7 @@
             "body": null,
             "documentation": null,
             "functionSelector": "d76d724e",
-            "id": 183,
+            "id": 7657,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -81,18 +81,18 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 179,
+              "id": 7653,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 176,
+                  "id": 7650,
                   "mutability": "mutable",
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 183,
-                  "src": "126:13:1",
+                  "scope": 7657,
+                  "src": "126:13:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -100,10 +100,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 175,
+                    "id": 7649,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "126:7:1",
+                    "src": "126:7:10",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -115,13 +115,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 178,
+                  "id": 7652,
                   "mutability": "mutable",
                   "name": "_pid",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 183,
-                  "src": "141:12:1",
+                  "scope": 7657,
+                  "src": "141:12:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -129,10 +129,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 177,
+                    "id": 7651,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "141:7:1",
+                    "src": "141:7:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -142,21 +142,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "125:29:1"
+              "src": "125:29:10"
             },
             "returnParameters": {
-              "id": 182,
+              "id": 7656,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 181,
+                  "id": 7655,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 183,
-                  "src": "178:7:1",
+                  "scope": 7657,
+                  "src": "178:7:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -164,10 +164,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 180,
+                    "id": 7654,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "178:7:1",
+                    "src": "178:7:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -177,203 +177,186 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "177:9:1"
+              "src": "177:9:10"
             },
-            "scope": 184,
-            "src": "94:93:1",
+            "scope": 7658,
+            "src": "94:93:10",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 185,
-        "src": "60:130:1"
+        "scope": 7659,
+        "src": "60:130:10"
       }
     ],
-    "src": "33:159:1"
+    "src": "33:159:10"
   },
   "legacyAST": {
-    "attributes": {
-      "absolutePath": "/D/DeployShiba/shibanova/contracts/interfaces/IBonusAggregator.sol",
-      "exportedSymbols": {
-        "IBonusAggregator": [
-          184
-        ]
-      },
-      "license": "MIT"
+    "absolutePath": "/D/Smart Contract Test/ShroomToken/Contracts/shibanova/contracts/interfaces/IBonusAggregator.sol",
+    "exportedSymbols": {
+      "IBonusAggregator": [
+        7658
+      ]
     },
-    "children": [
+    "id": 7659,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
       {
-        "attributes": {
-          "literals": [
-            "solidity",
-            "0.6",
-            ".12"
-          ]
-        },
-        "id": 174,
-        "name": "PragmaDirective",
-        "src": "33:23:1"
+        "id": 7648,
+        "literals": [
+          "solidity",
+          "0.6",
+          ".12"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:10"
       },
       {
-        "attributes": {
-          "abstract": false,
-          "baseContracts": [
-            null
-          ],
-          "contractDependencies": [
-            null
-          ],
-          "contractKind": "interface",
-          "documentation": null,
-          "fullyImplemented": false,
-          "linearizedBaseContracts": [
-            184
-          ],
-          "name": "IBonusAggregator",
-          "scope": 185
-        },
-        "children": [
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 7658,
+        "linearizedBaseContracts": [
+          7658
+        ],
+        "name": "IBonusAggregator",
+        "nodeType": "ContractDefinition",
+        "nodes": [
           {
-            "attributes": {
-              "body": null,
-              "documentation": null,
-              "functionSelector": "d76d724e",
-              "implemented": false,
-              "isConstructor": false,
-              "kind": "function",
-              "modifiers": [
-                null
-              ],
-              "name": "getBonusOnFarmsForUser",
-              "overrides": null,
-              "scope": 184,
-              "stateMutability": "view",
-              "virtual": false,
-              "visibility": "external"
-            },
-            "children": [
-              {
-                "children": [
-                  {
-                    "attributes": {
-                      "constant": false,
-                      "mutability": "mutable",
-                      "name": "_user",
-                      "overrides": null,
-                      "scope": 183,
-                      "stateVariable": false,
-                      "storageLocation": "default",
-                      "type": "address",
-                      "value": null,
-                      "visibility": "internal"
-                    },
-                    "children": [
-                      {
-                        "attributes": {
-                          "name": "address",
-                          "stateMutability": "nonpayable",
-                          "type": "address"
-                        },
-                        "id": 175,
-                        "name": "ElementaryTypeName",
-                        "src": "126:7:1"
-                      }
-                    ],
-                    "id": 176,
-                    "name": "VariableDeclaration",
-                    "src": "126:13:1"
+            "body": null,
+            "documentation": null,
+            "functionSelector": "d76d724e",
+            "id": 7657,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getBonusOnFarmsForUser",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 7653,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7650,
+                  "mutability": "mutable",
+                  "name": "_user",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 7657,
+                  "src": "126:13:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
                   },
-                  {
-                    "attributes": {
-                      "constant": false,
-                      "mutability": "mutable",
-                      "name": "_pid",
-                      "overrides": null,
-                      "scope": 183,
-                      "stateVariable": false,
-                      "storageLocation": "default",
-                      "type": "uint256",
-                      "value": null,
-                      "visibility": "internal"
-                    },
-                    "children": [
-                      {
-                        "attributes": {
-                          "name": "uint256",
-                          "type": "uint256"
-                        },
-                        "id": 177,
-                        "name": "ElementaryTypeName",
-                        "src": "141:7:1"
-                      }
-                    ],
-                    "id": 178,
-                    "name": "VariableDeclaration",
-                    "src": "141:12:1"
-                  }
-                ],
-                "id": 179,
-                "name": "ParameterList",
-                "src": "125:29:1"
-              },
-              {
-                "children": [
-                  {
-                    "attributes": {
-                      "constant": false,
-                      "mutability": "mutable",
-                      "name": "",
-                      "overrides": null,
-                      "scope": 183,
-                      "stateVariable": false,
-                      "storageLocation": "default",
-                      "type": "uint256",
-                      "value": null,
-                      "visibility": "internal"
-                    },
-                    "children": [
-                      {
-                        "attributes": {
-                          "name": "uint256",
-                          "type": "uint256"
-                        },
-                        "id": 180,
-                        "name": "ElementaryTypeName",
-                        "src": "178:7:1"
-                      }
-                    ],
-                    "id": 181,
-                    "name": "VariableDeclaration",
-                    "src": "178:7:1"
-                  }
-                ],
-                "id": 182,
-                "name": "ParameterList",
-                "src": "177:9:1"
-              }
-            ],
-            "id": 183,
-            "name": "FunctionDefinition",
-            "src": "94:93:1"
+                  "typeName": {
+                    "id": 7649,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "126:7:10",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7652,
+                  "mutability": "mutable",
+                  "name": "_pid",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 7657,
+                  "src": "141:12:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7651,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "141:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "125:29:10"
+            },
+            "returnParameters": {
+              "id": 7656,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7655,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 7657,
+                  "src": "178:7:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7654,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "178:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "177:9:10"
+            },
+            "scope": 7658,
+            "src": "94:93:10",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
           }
         ],
-        "id": 184,
-        "name": "ContractDefinition",
-        "src": "60:130:1"
+        "scope": 7659,
+        "src": "60:130:10"
       }
     ],
-    "id": 185,
-    "name": "SourceUnit",
-    "src": "33:159:1"
+    "src": "33:159:10"
   },
   "compiler": {
     "name": "solc",
     "version": "0.6.12+commit.27d51765.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.0",
-  "updatedAt": "2021-05-25T18:34:29.746Z",
+  "schemaVersion": "3.2.3",
+  "updatedAt": "2021-07-13T17:13:52.966Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

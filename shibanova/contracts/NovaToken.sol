@@ -4,7 +4,7 @@ pragma solidity 0.6.12;
 
 import "./libs/ShibaBEP20.sol";
 
-contract NovaToken is ShibaBEP20("Shiba NOVA", "NOVA") {
+contract NovaToken is ShibaBEP20("ShibaNOVA ", "NOVA") {
 
     address public sNova;
 

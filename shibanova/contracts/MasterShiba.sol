@@ -5,13 +5,13 @@ import "./libs/SafeMath.sol";
 import "./libs/IBEP20.sol";
 import "./libs/SafeBEP20.sol";
 import "./libs/Ownable.sol";
-
+import "./libs/ReentrancyGuard.sol";
 import "./ShibaBonusAggregator.sol";
 import "./libs/ShibaBEP20.sol";
 
 // MasterShiba is the master of Nova and sNova.
 // The Ownership of this contract is going to be transferred to a timelock
-contract MasterShiba is Ownable, IMasterBonus {
+contract MasterShiba is Ownable, IMasterBonus, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeBEP20 for ShibaBEP20;
     using SafeBEP20 for IBEP20;
@@ -137,11 +137,10 @@ contract MasterShiba is Ownable, IMasterBonus {
     }
 
     // Add a new lp to the pool. Can only be called by the owner.
-    function add(uint256 _allocPoint, IBEP20 _lpToken, uint256 _depositFeeBP, bool _isSNovaRewards, bool _withUpdate) external onlyOwner {
+    function add(uint256 _allocPoint, IBEP20 _lpToken, uint256 _depositFeeBP, bool _isSNovaRewards) external onlyOwner {
         require(_depositFeeBP <= 400, "add: invalid deposit fee basis points");
-        if (_withUpdate) {
-            massUpdatePools();
-        }
+        massUpdatePools();
+        
         uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
         totalAllocPoint = totalAllocPoint.add(_allocPoint);
         poolInfo.push(PoolInfo({
@@ -156,11 +155,10 @@ contract MasterShiba is Ownable, IMasterBonus {
     }
 
     // Update the given pool's Nova allocation point. Can only be called by the owner.
-    function set(uint256 _pid, uint256 _allocPoint, uint256 _depositFeeBP, bool _isSNovaRewards, bool _withUpdate) external onlyOwner {
+    function set(uint256 _pid, uint256 _allocPoint, uint256 _depositFeeBP, bool _isSNovaRewards) external onlyOwner {
         require(_depositFeeBP <= 400, "set: invalid deposit fee basis points");
-        if (_withUpdate) {
-            massUpdatePools();
-        }
+        massUpdatePools();
+        
         uint256 prevAllocPoint = poolInfo[_pid].allocPoint;
         poolInfo[_pid].allocPoint = _allocPoint;
         poolInfo[_pid].depositFeeBP = _depositFeeBP;
@@ -212,7 +210,7 @@ contract MasterShiba is Ownable, IMasterBonus {
         if (newEmissionRate >= NovaPerBlock) {
             return;
         }
-
+        massUpdatePools();
         lastReductionPeriodIndex = currentIndex;
         uint256 previousEmissionRate = NovaPerBlock;
         NovaPerBlock = newEmissionRate;
@@ -276,7 +274,7 @@ contract MasterShiba is Ownable, IMasterBonus {
     }
 
     // Deposit LP tokens to MasterShiba for Nova allocation.
-    function deposit(uint256 _pid, uint256 _amount) external validatePool(_pid) {
+    function deposit(uint256 _pid, uint256 _amount) external validatePool(_pid) nonReentrant {
         address _user = msg.sender;
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
@@ -317,7 +315,7 @@ contract MasterShiba is Ownable, IMasterBonus {
     }
 
     // Withdraw LP tokens from MasterShiba.
-    function withdraw(uint256 _pid, uint256 _amount) external validatePool(_pid) {
+    function withdraw(uint256 _pid, uint256 _amount) external validatePool(_pid) nonReentrant {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "withdraw: not good");

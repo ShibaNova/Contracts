@@ -1,22 +1,53 @@
-const MasterShiba = artifacts.require("MasterShiba");
+const NovaToken = artifacts.require('NovaToken')
+const SNovaToken = artifacts.require('SNovaToken')
+const FeeManager = artifacts.require('FeeManager')
+const ShibaBonusAggregator = artifacts.require('ShibaBonusAggregator')
+const ShibaMoneyPot = artifacts.require('ShibaMoneyPot')
+const MasterShiba = artifacts.require('MasterShiba')
 
-module.exports = function (deployer) {
+const swapPenaltyMaxPeriod = 84600;
+const swapPenaltyMaxPerSNova = 30;
+const owner = '0x729F3cA74A55F2aB7B584340DDefC29813fb21dF';
+const _teamAddr = '0x729F3cA74A55F2aB7B584340DDefC29813fb21dF';
+const _moneyPotShare = 7500;
+const _devaddr =  '0x729F3cA74A55F2aB7B584340DDefC29813fb21dF';
+const _NovaPerBlock = '1000000000000000000';
+const _startBlock = 10387726;
+const _initialUpdateMoneyPotPeriodNbBlocks = 28880;
+
+module.exports = async function(deployer, network, accounts) {
    
-    const _Nova = '0xa809F75876fdE949b029D99552547DD2c4e320CF';
-    const _sNova = '0x64F6852088B9B70fDe86225Ebb660F0d1709D5E7';
-    const _bonusAggregator = '0x0bD0445d91F37076c43254a162e611198A5De02d';
-    const _devaddr = '0xB8419aBa04B8b36E26E80b2b8284f1e0DA077bB2';
-    const _feeAddress = '0x9A50e1dCE6B5E4E6CDEab09A7aCb5068f8e61D91'; //fee manager
-    const _NovaPerBlock = 0xde0b6b3a7640000n;
-    const _startBlock = 9155945;
-deployer.deploy(MasterShiba, 
-     _Nova,
-     _sNova,
-     _bonusAggregator,
-     _devaddr,
-     _feeAddress,
-     _NovaPerBlock,
-     _startBlock);
- 
+    await deployer.deploy(NovaToken)
+    const _Nova = await NovaToken.deployed()
 
-};
+    await deployer.deploy(SNovaToken, swapPenaltyMaxPeriod, swapPenaltyMaxPerSNova)
+    const _sNova = await SNovaToken.deployed()
+
+    await deployer.deploy(ShibaBonusAggregator)
+    const _bonusAggregator = await ShibaBonusAggregator.deployed()
+
+    await deployer.deploy(FeeManager, _Nova.address, _teamAddr, _moneyPotShare)
+    const _feeAddress = await FeeManager.deployed()
+    const _feeManager = await FeeManager.deployed()
+
+    await deployer.deploy(MasterShiba, 
+        _Nova.address,
+        _sNova.address,
+        _bonusAggregator.address,
+        _devaddr,
+        _feeAddress.address,
+        _NovaPerBlock,
+        _startBlock
+        )
+    const _masterShiba = await MasterShiba.deployed()
+
+    await deployer.deploy(ShibaMoneyPot, 
+        _sNova.address, 
+        _feeManager.address, 
+        _masterShiba.address, 
+        _startBlock, 
+        _initialUpdateMoneyPotPeriodNbBlocks
+        )
+
+    await _Nova.mint(accounts[0], '1000000000000000000000')
+}
