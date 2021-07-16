@@ -210,7 +210,7 @@ contract MasterShiba is Ownable, IMasterBonus, ReentrancyGuard {
         if (newEmissionRate >= NovaPerBlock) {
             return;
         }
-        massUpdatePools();
+        
         lastReductionPeriodIndex = currentIndex;
         uint256 previousEmissionRate = NovaPerBlock;
         NovaPerBlock = newEmissionRate;
