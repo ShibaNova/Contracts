@@ -1,18 +1,18 @@
-# ShibaNova contracts (testnet)
+# ShibaNova contracts 
 
 
-FeeManager: [0xBF08a58d52b8bd98616760C6eEF23625329f7b0B ](https://testnet.bscscan.com/address/0xBF08a58d52b8bd98616760C6eEF23625329f7b0B#contracts)
+FeeManager: [0x2f201597cb20b5E9234Ba497ae02f5553B00eF20 ](https://bscscan.com/address/0x2f201597cb20b5E9234Ba497ae02f5553B00eF20#contracts)
 
-MasterShiba: [0xDDddD4d6a604A311CA2d90c54E81D2e31424B813](https://testnet.bscscan.com/address/0xDDddD4d6a604A311CA2d90c54E81D2e31424B813#code)
+MasterShiba: [0x8A4f4c7F4804D30c718a76B3fde75f2e0cFd8712](https://bscscan.com/address/0x8A4f4c7F4804D30c718a76B3fde75f2e0cFd8712#code)
 
-NovaToken: [0x7cc3F3945351F1Bc3b57836d90af3D7dCD0bEF9c ](https://testnet.bscscan.com/address/0x7cc3F3945351F1Bc3b57836d90af3D7dCD0bEF9c#contracts)
+NovaToken: [0x56E344bE9A7a7A1d27C854628483Efd67c11214F ](https://bscscan.com/address/0x56E344bE9A7a7A1d27C854628483Efd67c11214F#contracts)
 
-SNovaToken: [0xb79927bA8D1dF7B9c2199f3307Ddf6B263eBa6A3 ](https://testnet.bscscan.com/address/0xb79927bA8D1dF7B9c2199f3307Ddf6B263eBa6A3#contracts)
+SNovaToken: [0x0c0bf2bD544566A11f59dC70a8F43659ac2FE7c2 ](https://bscscan.com/address/0x0c0bf2bD544566A11f59dC70a8F43659ac2FE7c2#contracts)
 
-ShibaBonusAggregator: [0x2CC9FC9ab9ae589fbb305bA31f5857b35A172020 ](https://testnet.bscscan.com/address/0x2CC9FC9ab9ae589fbb305bA31f5857b35A172020#contracts3)
+ShibaBonusAggregator: [0xEeCaEA7b24fA3eE35477B04104Ffd4B8453C3877 ](https://bscscan.com/address/0xEeCaEA7b24fA3eE35477B04104Ffd4B8453C3877#contracts3)
 
-ShibaFactory : [0x1723f701B8940Fa18Af0D5BB963b45EE57C499e6 ](https://testnet.bscscan.com/address/0x1723f701B8940Fa18Af0D5BB963b45EE57C499e6#contracts)
+ShibaFactory : [0x251912dE998ec91DFDf67EfBe032d6f4aB5EC485 ](https://bscscan.com/address/0x251912dE998ec91DFDf67EfBe032d6f4aB5EC485#contracts)
 
-ShibaMoneyPot: [0x6099c4f8b42C4F41c070514EF48fCA00ca454710 ](https://testnet.bscscan.com/address/0x6099c4f8b42C4F41c070514EF48fCA00ca454710#contracts)
+ShibaMoneyPot: [0xAD07Cf266C99d0cC379D4f460F0FF27b81314238 ](https://bscscan.com/address/0xAD07Cf266C99d0cC379D4f460F0FF27b81314238#contracts)
 
-ShibaRouter : [0xA58ebc8d0D2f1d7F07656A3FbE6e2E51ae767ae9 ](https://testnet.bscscan.com/address/0xA58ebc8d0D2f1d7F07656A3FbE6e2E51ae767ae9#contracts)
+ShibaRouter : [0xeb17Dd35e47B1a41ba4D86B3506ec1f9b680b56a ](https://bscscan.com/address/0xeb17Dd35e47B1a41ba4D86B3506ec1f9b680b56a#contracts)
