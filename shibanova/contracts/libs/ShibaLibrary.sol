@@ -21,7 +21,7 @@ library ShibaLibrary {
                 hex'ff',
                 factory,
                 keccak256(abi.encodePacked(token0, token1)),
-                hex'c7bd2786b4f02372e9f672ef8756c1b2ff83055f0bd71e65f5cb766b952aed32' // init code hash
+                hex'5476b38c256c4fcdd074e76bbd0581f1ee8b1e66723a57f0322284ec50ce078a' // init code hash
             ))));
     }
 
