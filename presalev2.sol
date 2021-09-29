@@ -235,15 +235,37 @@ contract Whitelisted is Ownable {
         require(isWhitelisted(msg.sender));
         _;
     }
+
+    // Accounts that can add users to whitelist
+     modifier onlyProvider {
+        require(isProvider(msg.sender));
+        _;
+    }
+
+    function isProvider(address _provider) public view returns (bool){
+        return provider[_provider] == true ? true : false;
+    }
+     // Set new providers
+    function setProvider(address[] memory _provider) public onlyOwner {
+        for (uint i = 0; i < _provider.length; i++) {
+        provider[_provider[i]] = true;
+        }
+    }
+// Deactivate current provider
+    function deactivateProvider ( address _provider) public onlyOwner {
+        require(provider[_provider] == true);
+        provider[_provider] = false;
+    }
+    
   
-    function whitelistAddresses (address[] memory _purchaser) public onlyOwner {
+    function whitelistAddresses (address[] memory _purchaser) public onlyProvider {
         for (uint i = 0; i < _purchaser.length; i++) {
             whitelist[_purchaser[i]] = true;
         }
     }
     
     // Delete purchaser from whitelist
-    function deleteFromWhitelist(address _purchaser) public onlyOwner {
+    function deleteFromWhitelist(address _purchaser) public onlyProvider {
         whitelist[_purchaser] = false;
     }
    
@@ -374,12 +396,12 @@ contract Presale is Ownable, Whitelisted, ReentrancyGuard {
 
     IERC20 public token;
     address public Payee; // wallet that recieves the bnb and liquidity
-    address public WBNB = 0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd; // 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c, 0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd
-    address public sNova = 0xb79927bA8D1dF7B9c2199f3307Ddf6B263eBa6A3; // 0x0c0bf2bD544566A11f59dC70a8F43659ac2FE7c2, 0xb79927bA8D1dF7B9c2199f3307Ddf6B263eBa6A3
-    address public nova = 0x7cc3F3945351F1Bc3b57836d90af3D7dCD0bEF9c; // 0x56E344bE9A7a7A1d27C854628483Efd67c11214F, 0x7cc3F3945351F1Bc3b57836d90af3D7dCD0bEF9c
-    address public novaRouter = 0xA58ebc8d0D2f1d7F07656A3FbE6e2E51ae767ae9; // 0xeb17Dd35e47B1a41ba4D86B3506ec1f9b680b56a, 0xA58ebc8d0D2f1d7F07656A3FbE6e2E51ae767ae9
-    address public novaFactory = 0x1723f701B8940Fa18Af0D5BB963b45EE57C499e6; // 0x251912dE998ec91DFDf67EfBe032d6f4aB5EC485, 0x1723f701B8940Fa18Af0D5BB963b45EE57C499e6
-    address public feeManager = 0x641bE13ce540384E14586906900518204090D0da; // address for NovaPad fee
+    address public constant WBNB = 0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd; // 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c, 0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd
+    address public constant sNova = 0xb79927bA8D1dF7B9c2199f3307Ddf6B263eBa6A3; // 0x0c0bf2bD544566A11f59dC70a8F43659ac2FE7c2, 0xb79927bA8D1dF7B9c2199f3307Ddf6B263eBa6A3
+    address public constant nova = 0x7cc3F3945351F1Bc3b57836d90af3D7dCD0bEF9c; // 0x56E344bE9A7a7A1d27C854628483Efd67c11214F, 0x7cc3F3945351F1Bc3b57836d90af3D7dCD0bEF9c
+    address public constant novaRouter = 0xA58ebc8d0D2f1d7F07656A3FbE6e2E51ae767ae9; // 0xeb17Dd35e47B1a41ba4D86B3506ec1f9b680b56a, 0xA58ebc8d0D2f1d7F07656A3FbE6e2E51ae767ae9
+    address public constant novaFactory = 0x1723f701B8940Fa18Af0D5BB963b45EE57C499e6; // 0x251912dE998ec91DFDf67EfBe032d6f4aB5EC485, 0x1723f701B8940Fa18Af0D5BB963b45EE57C499e6
+    address public constant feeManager = 0x641bE13ce540384E14586906900518204090D0da; // address for NovaPad fee
     
     bool public canClaim = false;
     bool public presaleFailed = false;
@@ -395,7 +417,7 @@ contract Presale is Ownable, Whitelisted, ReentrancyGuard {
     uint256 public fee = 1; // launchpad fee div 100
     
     uint256 public maxBuy; // 2000000000000000000 = 2 bnb
-    uint256 public minBuy = 100000000000000000; // .1 bnb 100000000000000000
+    uint256 public minBuy = 50000000000000000; // .05 bnb 50000000000000000
     uint256 public minSNova = 100000000000000000000; // 100 sNova 100000000000000000000
     uint256 public minNova = 500000000000000000000; // 500 Nova 500000000000000000000
    
@@ -490,7 +512,11 @@ contract Presale is Ownable, Whitelisted, ReentrancyGuard {
         require (block.timestamp > unlockTime, 'Liquidity is still locked');
         address liqPair = Factory(novaFactory).getPair(address(WBNB), address(token));
         uint256 liqAmount = IERC20(liqPair).balanceOf(address(this));
-        TransferHelper.safeTransfer(address(liqPair), address(Payee), liqAmount);
+
+        uint256 amount = liqAmount;
+        liqAmount = 0;
+
+        TransferHelper.safeTransfer(address(liqPair), address(Payee), amount);
 
     }
 
@@ -506,12 +532,14 @@ contract Presale is Ownable, Whitelisted, ReentrancyGuard {
     }
 
     function setSwapRate(uint256 newRate) public onlyOwner {
-        require(block.timestamp < startBlock); //cannot modify after presale starts
+        require(block.timestamp < startBlock, 'Cannot modify after presale starts');
+        require( newRate > 0, 'Rate cannot be 0 or negative');
         emit NewSwapRate(swapRate, newRate);
         swapRate = newRate;       
     }
     
     function setMaxBuy(uint256 newMax) public onlyOwner {
+        require( newMax > minBuy, 'Max cannot be less than the minimum buy amount');
         emit NewMaxBuy(maxBuy, newMax);
         maxBuy = newMax;
     }
