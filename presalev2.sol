@@ -235,7 +235,7 @@ contract Whitelisted is Ownable {
         require(isWhitelisted(msg.sender));
         _;
     }
-
+ 
     // Accounts that can add users to whitelist
      modifier onlyProvider {
         require(isProvider(msg.sender));
