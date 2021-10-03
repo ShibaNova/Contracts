@@ -19,7 +19,7 @@ to BNB/BUSD before sending them to the Money Pot
 // make sure owner can still operate, add distributefee for snova
 // function to change tier requirements
 
-contract FeeManager is Ownable{
+contract DecentralizedFeeManager is Ownable{
     using SafeMath for uint256;
     using SafeBEP20 for IBEP20;
 
