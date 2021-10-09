@@ -200,7 +200,7 @@ contract ShibaMoneyPot is Ownable, IMoneyPot {
 
 
     /*
-    Update tokenPot, user's sNova balance (cache) and pending dividends
+    Update tokenPot, user's sNova balance (cache) and pending dividends 
     */
     function updateSNovaHolder(address _sNovaHolder) external virtual override {
         uint256 holderPreviousSNovaAmount = sNovaHoldersInfo[_sNovaHolder];
