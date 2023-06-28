@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: MIT
 pragma solidity =0.6.12;
 
 import './interfaces/IShibaFactory.sol';
@@ -15,6 +14,10 @@ contract ShibaRouter is IShibaRouter02 {
 
     address public immutable override factory;
     address public immutable override WETH;
+
+    // delay checked against last block.timestamp attributed to lastSenderTxn mapping
+    uint public senderDelay = 3000;
+    mapping(address => uint) public lastSenderTxn;
 
     modifier ensure(uint deadline) {
         require(deadline >= block.timestamp, 'ShibaRouter: EXPIRED');
@@ -211,7 +214,12 @@ contract ShibaRouter is IShibaRouter02 {
 
     // **** SWAP ****
     // requires the initial amount to have already been sent to the first pair
-    function _swap(uint[] memory amounts, address[] memory path, address _to) internal virtual {
+
+    // add msg.sender to swap params, check against mapping to track last swap here
+    // updates after check to new time
+    function _swap(address sender, uint[] memory amounts, address[] memory path, address _to) internal virtual {
+        require(lastSenderTxn[sender] <= block.timestamp, "Attempting swap too soon");
+        lastSenderTxn[sender] = block.timestamp + senderDelay;
         for (uint i; i < path.length - 1; i++) {
             (address input, address output) = (path[i], path[i + 1]);
             (address token0,) = ShibaLibrary.sortTokens(input, output);
@@ -235,7 +243,7 @@ contract ShibaRouter is IShibaRouter02 {
         TransferHelper.safeTransferFrom(
             path[0], msg.sender, ShibaLibrary.pairFor(factory, path[0], path[1]), amounts[0]
         );
-        _swap(amounts, path, to);
+        _swap(msg.sender, amounts, path, to);
     }
     function swapTokensForExactTokens(
         uint amountOut,
@@ -249,7 +257,7 @@ contract ShibaRouter is IShibaRouter02 {
         TransferHelper.safeTransferFrom(
             path[0], msg.sender, ShibaLibrary.pairFor(factory, path[0], path[1]), amounts[0]
         );
-        _swap(amounts, path, to);
+        _swap(msg.sender, amounts, path, to);
     }
     function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline)
         external
@@ -264,7 +272,7 @@ contract ShibaRouter is IShibaRouter02 {
         require(amounts[amounts.length - 1] >= amountOutMin, 'ShibaRouter: INSUFFICIENT_OUTPUT_AMOUNT');
         IWETH(WETH).deposit{value: amounts[0]}();
         assert(IWETH(WETH).transfer(ShibaLibrary.pairFor(factory, path[0], path[1]), amounts[0]));
-        _swap(amounts, path, to);
+        _swap(msg.sender, amounts, path, to);
     }
     function swapTokensForExactETH(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
         external
@@ -279,7 +287,7 @@ contract ShibaRouter is IShibaRouter02 {
         TransferHelper.safeTransferFrom(
             path[0], msg.sender, ShibaLibrary.pairFor(factory, path[0], path[1]), amounts[0]
         );
-        _swap(amounts, path, address(this));
+        _swap(msg.sender, amounts, path, address(this));
         IWETH(WETH).withdraw(amounts[amounts.length - 1]);
         TransferHelper.safeTransferETH(to, amounts[amounts.length - 1]);
     }
@@ -296,7 +304,7 @@ contract ShibaRouter is IShibaRouter02 {
         TransferHelper.safeTransferFrom(
             path[0], msg.sender, ShibaLibrary.pairFor(factory, path[0], path[1]), amounts[0]
         );
-        _swap(amounts, path, address(this));
+        _swap(msg.sender, amounts, path, address(this));
         IWETH(WETH).withdraw(amounts[amounts.length - 1]);
         TransferHelper.safeTransferETH(to, amounts[amounts.length - 1]);
     }
@@ -313,14 +321,18 @@ contract ShibaRouter is IShibaRouter02 {
         require(amounts[0] <= msg.value, 'ShibaRouter: EXCESSIVE_INPUT_AMOUNT');
         IWETH(WETH).deposit{value: amounts[0]}();
         assert(IWETH(WETH).transfer(ShibaLibrary.pairFor(factory, path[0], path[1]), amounts[0]));
-        _swap(amounts, path, to);
+        _swap(msg.sender, amounts, path, to);
         // refund dust eth, if any
         if (msg.value > amounts[0]) TransferHelper.safeTransferETH(msg.sender, msg.value - amounts[0]);
     }
 
     // **** SWAP (supporting fee-on-transfer tokens) ****
     // requires the initial amount to have already been sent to the first pair
-    function _swapSupportingFeeOnTransferTokens(address[] memory path, address _to) internal virtual {
+    // same sender delay as swap function
+    function _swapSupportingFeeOnTransferTokens(address sender, address[] memory path, address _to) internal virtual {
+        require(lastSenderTxn[sender] <= block.timestamp, "Attempting swap too soon");
+        lastSenderTxn[sender] = block.timestamp + senderDelay;
+
         for (uint i; i < path.length - 1; i++) {
             (address input, address output) = (path[i], path[i + 1]);
             (address token0,) = ShibaLibrary.sortTokens(input, output);
@@ -349,7 +361,7 @@ contract ShibaRouter is IShibaRouter02 {
             path[0], msg.sender, ShibaLibrary.pairFor(factory, path[0], path[1]), amountIn
         );
         uint balanceBefore = IERC20(path[path.length - 1]).balanceOf(to);
-        _swapSupportingFeeOnTransferTokens(path, to);
+        _swapSupportingFeeOnTransferTokens(msg.sender, path, to);
         require(
             IERC20(path[path.length - 1]).balanceOf(to).sub(balanceBefore) >= amountOutMin,
             'ShibaRouter: INSUFFICIENT_OUTPUT_AMOUNT'
@@ -372,7 +384,7 @@ contract ShibaRouter is IShibaRouter02 {
         IWETH(WETH).deposit{value: amountIn}();
         assert(IWETH(WETH).transfer(ShibaLibrary.pairFor(factory, path[0], path[1]), amountIn));
         uint balanceBefore = IERC20(path[path.length - 1]).balanceOf(to);
-        _swapSupportingFeeOnTransferTokens(path, to);
+        _swapSupportingFeeOnTransferTokens(msg.sender, path, to);
         require(
             IERC20(path[path.length - 1]).balanceOf(to).sub(balanceBefore) >= amountOutMin,
             'ShibaRouter: INSUFFICIENT_OUTPUT_AMOUNT'
@@ -394,7 +406,7 @@ contract ShibaRouter is IShibaRouter02 {
         TransferHelper.safeTransferFrom(
             path[0], msg.sender, ShibaLibrary.pairFor(factory, path[0], path[1]), amountIn
         );
-        _swapSupportingFeeOnTransferTokens(path, address(this));
+        _swapSupportingFeeOnTransferTokens(msg.sender, path, address(this));
         uint amountOut = IERC20(WETH).balanceOf(address(this));
         require(amountOut >= amountOutMin, 'ShibaRouter: INSUFFICIENT_OUTPUT_AMOUNT');
         IWETH(WETH).withdraw(amountOut);
