@@ -17,7 +17,7 @@ contract ShibaRouter is IShibaRouter02 {
     address public owner;
 
     // delay checked against last block.timestamp attributed to lastSenderTxn mapping
-    uint public senderDelay = 3000;
+    uint public senderDelay = 30;
     mapping(address => uint) public lastSenderTxn;
     mapping(address => bool) internal overrideSwapDelay;
 
@@ -45,6 +45,10 @@ contract ShibaRouter is IShibaRouter02 {
     function changeOwner(address _owner) external {
         require(msg.sender == owner, "only owner can set");
         owner = _owner;
+    }
+    function changeSwapDelay(uint _newDelay) external {
+        require(msg.sender == owner, "only owner can set");
+        senderDelay = _newDelay;
     }
 
     // **** ADD LIQUIDITY ****
