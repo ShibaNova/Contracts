@@ -1,4 +1,4 @@
-pragma solidity =0.6.12;
+pragma solidity =0.6.6;
 
 import './interfaces/IShibaFactory.sol';
 import './libs/TransferHelper.sol';
@@ -14,10 +14,12 @@ contract ShibaRouter is IShibaRouter02 {
 
     address public immutable override factory;
     address public immutable override WETH;
+    address public owner;
 
     // delay checked against last block.timestamp attributed to lastSenderTxn mapping
     uint public senderDelay = 3000;
     mapping(address => uint) public lastSenderTxn;
+    mapping(address => bool) internal overrideSwapDelay;
 
     modifier ensure(uint deadline) {
         require(deadline >= block.timestamp, 'ShibaRouter: EXPIRED');
@@ -27,12 +29,23 @@ contract ShibaRouter is IShibaRouter02 {
     constructor(address _factory, address _WETH) public {
         factory = _factory;
         WETH = _WETH;
+        owner = msg.sender;
     }
 
     receive() external payable {
         assert(msg.sender == WETH); // only accept ETH via fallback from the WETH contract
     }
 
+    // set addresses to avoid swap delay or not
+    function setNonDelayAddress(address target, bool swapDelay) external {
+        require(msg.sender == owner, "only owner can set");
+        overrideSwapDelay[target] = swapDelay;
+    }
+    // set new owner
+    function changeOwner(address _owner) external {
+        require(msg.sender == owner, "only owner can set");
+        owner = _owner;
+    }
 
     // **** ADD LIQUIDITY ****
     function _addLiquidity(
@@ -218,8 +231,10 @@ contract ShibaRouter is IShibaRouter02 {
     // add msg.sender to swap params, check against mapping to track last swap here
     // updates after check to new time
     function _swap(address sender, uint[] memory amounts, address[] memory path, address _to) internal virtual {
-        require(lastSenderTxn[sender] <= block.timestamp, "Attempting swap too soon");
-        lastSenderTxn[sender] = block.timestamp + senderDelay;
+        if (!overrideSwapDelay[sender]) {
+            require(lastSenderTxn[sender] <= block.timestamp, "Attempting swap too soon");
+            lastSenderTxn[sender] = block.timestamp + senderDelay;
+        }
         for (uint i; i < path.length - 1; i++) {
             (address input, address output) = (path[i], path[i + 1]);
             (address token0,) = ShibaLibrary.sortTokens(input, output);
@@ -330,9 +345,10 @@ contract ShibaRouter is IShibaRouter02 {
     // requires the initial amount to have already been sent to the first pair
     // same sender delay as swap function
     function _swapSupportingFeeOnTransferTokens(address sender, address[] memory path, address _to) internal virtual {
-        require(lastSenderTxn[sender] <= block.timestamp, "Attempting swap too soon");
-        lastSenderTxn[sender] = block.timestamp + senderDelay;
-
+        if (!overrideSwapDelay[sender]) {
+            require(lastSenderTxn[sender] <= block.timestamp, "Attempting swap too soon");
+            lastSenderTxn[sender] = block.timestamp + senderDelay;
+        }
         for (uint i; i < path.length - 1; i++) {
             (address input, address output) = (path[i], path[i + 1]);
             (address token0,) = ShibaLibrary.sortTokens(input, output);
