@@ -33,7 +33,7 @@ contract DecentralizedFeeManager is Ownable{
 
     event NewTier1 (uint256 indexed previoustier1, uint256 newTier1);
     event NewTier2 (uint256 indexed previoustier2, uint256 newTier2);
-    event feeDistributed (address indexed _from);
+    event feeDistributed (address indexed token, uint256 amount);
     event LPTokenRegistered (address indexed _registeredToken);
     event LPTokenUnRegistered (address indexed _unRegisteredToken);
     event UpdatedMoneyPotShares(uint256 indexed previousMoneyPotShare, uint256 newMoneyPotShare);
@@ -41,6 +41,12 @@ contract DecentralizedFeeManager is Ownable{
     IMoneyPot public moneyPot;
     IShibaRouter02 public router;
     IBEP20 public SNova;
+    address public nova = 0x56E344bE9A7a7A1d27C854628483Efd67c11214F;
+    address public phx = 0x0F925153230C836761F294eA0d81Cef58E271Fb7;
+    address public phxManager = 0x7c4C6e500adf187054bbED7bCc7166157ab0fE73;
+
+ 
+    // add funcs to update phx address
 
     address public teamAddr; // Used for dev/marketing and others funds for project
     address public constant WBNB = 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c;
@@ -103,18 +109,14 @@ contract DecentralizedFeeManager is Ownable{
         for (uint256 index = 0; index < length; ++index) {
             _removeLiquidityToToken(registeredLPToken[index]);
         }
+        IBEP20(nova).transfer(BURN_ADDRESS, IBEP20(nova).balanceOf(address(this)));
+        IBEP20(phx).transfer(phxManager, IBEP20(phx).balanceOf(address(this)));
     }
     // Breaks LP for specific LP token
     function removeLiquidityToToken(address _token) external {
         require(address(_token) != address(0), 'Cannot set zero address');
         require(IBEP20(SNova).balanceOf(msg.sender) > tier1 || address(msg.sender) == owner(), 'User must hold more than the Tier 1 amount of SNOVA');
-        IShibaPair _pair = IShibaPair(_token);
-        uint256 _amount = _pair.balanceOf(address(this));
-        address token0 = _pair.token0();
-        address token1 = _pair.token1();
-
-        _pair.approve(address(router), _amount);
-        router.removeLiquidity(token0, token1, _amount, 0, 0, address(this), block.timestamp.add(100));
+        _removeLiquidityToToken(_token);
     }
     // internal function used by removeAllLiquidityToToken
     function _removeLiquidityToToken(address _token) internal {
@@ -122,9 +124,11 @@ contract DecentralizedFeeManager is Ownable{
         uint256 _amount = _pair.balanceOf(address(this));
         address token0 = _pair.token0();
         address token1 = _pair.token1();
+        if(_amount > 0) {
+            _pair.approve(address(router), _amount);
+            router.removeLiquidity(token0, token1, _amount, 0, 0, address(this), block.timestamp.add(100));
+        }
 
-        _pair.approve(address(router), _amount);
-        router.removeLiquidity(token0, token1, _amount, 0, 0, address(this), block.timestamp.add(100));
     }
 
     // Swaps balance of token0 to token1. Currently only allowed by owner as a backup for setting up fees for the money pot.
@@ -157,25 +161,35 @@ contract DecentralizedFeeManager is Ownable{
     }
 
     // Used by owner to swap specific amounts of tokens if needed
-    function swapToTokenSupportingFees(address _token0, address _token1, uint256 _token0Amount) external onlyOwner {        
+    function swapToTokenSupportingFees(address _token0, address _token1, uint256 _token0Amount) external onlyOwner { 
+        _swapToTokenSupportingFees(_token0, _token1, _token0Amount);
+    }
+
+    function _swapToTokenSupportingFees(address _token0, address _token1, uint256 _token0Amount) internal {       
         IBEP20(_token0).approve(address(router), _token0Amount);
         address[] memory path = new address[](2);
         path[0] = _token0;
         path[1] = _token1;
+
         router.swapExactTokensForTokensSupportingFeeOnTransferTokens(_token0Amount, 0, path, address(this), block.timestamp.add(100));
+
     }
     // sets amount of fees go to the team and moneypot. Requires moneyPot have at least 75%
-    function updateShares(uint256 _moneyPotShare) external onlyOwner{
-        require(_moneyPotShare <= 10000, "Invalid percent");
-        require(_moneyPotShare >= 7500, "Moneypot share must be at least 75%");
+    function updateShares(uint256 _moneyPotShare, uint256 _teamShare) external onlyOwner{
+        // update this to include teamshare in 10000 total
+        require(_moneyPotShare <= 10000 - _teamShare, "Invalid percent");
         emit UpdatedMoneyPotShares(moneyPotShare, _moneyPotShare);
         moneyPotShare = _moneyPotShare;        
-        teamShare = 10000 - moneyPotShare;
+        teamShare = _teamShare;
     }
 
     function setTeamAddr(address _newTeamAddr) external onlyOwner{
         require(address(_newTeamAddr) != address(0), 'Cannot set as 0 address');
         teamAddr = _newTeamAddr;
+    }
+    
+    function updatePhxManager(address _newManager) external onlyOwner {
+        phxManager = _newManager;
     }
 
     function setupRouter(address _router) external onlyOwner{
@@ -204,7 +218,6 @@ contract DecentralizedFeeManager is Ownable{
         tier2 = newTier2;
     }
 
-
     /* distribute fee to the moneypot and dev wallet. If feeManager has 0 balance for a registered token, it does not send that token  */
      function distributeFee() external {
         require(IBEP20(SNova).balanceOf(msg.sender) > tier1 || address(msg.sender) == owner(), 'User must hold more than the Tier 1 amount of SNOVA');
@@ -214,13 +227,19 @@ contract DecentralizedFeeManager is Ownable{
             uint256 _amount = _curToken.balanceOf(address(this));
             if (_amount > 0) {
                 uint256 _moneyPotAmount = _amount.mul(moneyPotShare).div(10000);
+                uint256 _teamAmount = _amount.mul(teamShare).div(10000);
                 _curToken.approve(address(moneyPot), _moneyPotAmount);
                 moneyPot.depositRewards(address(_curToken), _moneyPotAmount);
-                _curToken.safeTransfer(teamAddr, _amount.sub(_moneyPotAmount));
+                _curToken.safeTransfer(teamAddr, _teamAmount);
+
+                uint256 _burnAmount = _amount - _moneyPotAmount - _teamAmount;
+                _swapToTokenSupportingFees(address(_curToken), nova, _burnAmount);
+                
+                emit feeDistributed(address(_curToken), _amount);
             }
             else
             return;
         }
-        emit feeDistributed(msg.sender);
+        
     }
 }
